@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    container_name: postgres_container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.production
+
+  bun:
+    build:
+      context: .
+      dockerfile: Dockerfile.bun
+    container_name: bun_server
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.production
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
